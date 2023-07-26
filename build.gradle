@@ -1,0 +1,24 @@
+plugins {
+    id 'java'
+    id 'groovy'
+}
+
+group = 'com.tulski'
+version = '1.0-SNAPSHOT'
+
+java {
+    sourceCompatibility = '20'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation 'org.apache.groovy:groovy-all:4.0.12'
+    testImplementation 'org.spockframework:spock-core:2.3-groovy-4.0'
+}
+
+test {
+    useJUnitPlatform()
+}
