@@ -11,13 +11,12 @@ class DrinkMakerProtocolTranslatorSpec extends Specification {
         def command = "T:1:1"
 
         when: "translating command"
-        var result = translator.translate(command) as DrinkMakerCommand.MakeDrink
+        var result = translator.translate(command) as DrinkMakerCommand.DrinkOrder
 
         then: "result should be correct"
-        result.drink == Drink.TEA
-        result.amount == 1
-        result.sugarQuantity == 1
-        result.stick
+        result.drinkType() == DrinkType.TEA
+        result.sugarQuantity() == 1
+        result.stick()
     }
 
     def "should translate order for 1 chocolate with no sugar and no stick"() {
@@ -25,13 +24,12 @@ class DrinkMakerProtocolTranslatorSpec extends Specification {
         def command = "H::"
 
         when: "translating command"
-        var result = translator.translate(command) as DrinkMakerCommand.MakeDrink
+        var result = translator.translate(command) as DrinkMakerCommand.DrinkOrder
 
         then: "result should be correct"
-        result.drink == Drink.CHOCOLATE
-        result.amount == 1
-        result.sugarQuantity == 0
-        !result.stick
+        result.drinkType() == DrinkType.CHOCOLATE
+        result.sugarQuantity() == 0
+        !result.stick()
     }
 
     def "should translate order for 1 coffee with 2 sugars and stick"() {
@@ -39,13 +37,12 @@ class DrinkMakerProtocolTranslatorSpec extends Specification {
         def command = "C:2:1"
 
         when: "translating command"
-        var result = translator.translate(command) as DrinkMakerCommand.MakeDrink
+        var result = translator.translate(command) as DrinkMakerCommand.DrinkOrder
 
         then: "result should be correct"
-        result.drink == Drink.COFFEE
-        result.amount == 1
-        result.sugarQuantity == 2
-        result.stick
+        result.drinkType() == DrinkType.COFFEE
+        result.sugarQuantity() == 2
+        result.stick()
     }
 
     def "should translate command with message"() {

@@ -25,17 +25,17 @@ class DrinkMakerProtocolTranslator {
 
         var drink = mapCommadTypeToDrinkType(commandType);
 
-        return new DrinkMakerCommand.MakeDrink(drink, 1, sugarQuantity, stick);
+        return new DrinkMakerCommand.DrinkOrder(drink, sugarQuantity, stick);
     }
 
-    private static Drink mapCommadTypeToDrinkType(DrinkMakerCommandType commandType) {
+    private static DrinkType mapCommadTypeToDrinkType(DrinkMakerCommandType commandType) {
         switch (commandType) {
             case TEA:
-                return Drink.TEA;
+                return DrinkType.TEA;
             case CHOCOLATE:
-                return Drink.CHOCOLATE;
+                return DrinkType.CHOCOLATE;
             case COFFEE:
-                return Drink.COFFEE;
+                return DrinkType.COFFEE;
             default:
                 throw new IllegalArgumentException("Unknown command type: " + commandType);
         }

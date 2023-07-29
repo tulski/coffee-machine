@@ -1,7 +1,4 @@
 package com.tulski.coffeemachine;
 
-enum Drink {
-    TEA,
-    CHOCOLATE,
-    COFFEE
+public record Drink(DrinkType type, int sugar, boolean stick) {
 }
