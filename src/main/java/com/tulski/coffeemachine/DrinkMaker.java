@@ -6,13 +6,15 @@ import java.util.Optional;
 
 class DrinkMaker {
 
-    private final UserNotifier userNotifier;
     private final Pricing pricing;
+    private final UserNotifier userNotifier;
+    private final ManagementReporter managementReporter;
     private Money balance;
 
-    public DrinkMaker(UserNotifier userNotifier, Pricing pricing) {
-        this.userNotifier = userNotifier;
+    public DrinkMaker(Pricing pricing, UserNotifier userNotifier, ManagementReporter managementReporter) {
         this.pricing = pricing;
+        this.userNotifier = userNotifier;
+        this.managementReporter = managementReporter;
         this.balance = Money.zero();
     }
 
@@ -27,14 +29,20 @@ class DrinkMaker {
     }
 
     public Optional<Drink> makeDrink(DrinkOrder order) {
-        var price = pricing.calculateTotalPriceFor(order);
-        if (balance.isLessThan(price)) {
-            userNotifier.notEnoughMoneyProvided(price.subtract(balance));
+        var orderValue = pricing.calculateTotalPriceFor(order);
+        if (balance.isLessThan(orderValue)) {
+            userNotifier.notEnoughMoneyProvided(orderValue.subtract(balance));
             return Optional.empty();
         }
-        balance.subtract(price);
+
+        balance = balance.subtract(orderValue);
+        
         var drink = new Drink(order.drinkType(), order.sugarQuantity(), order.stick(), order.extraHot());
+        var completedOrder = CompletedDrinkOrder.of(order, orderValue, balance);
+
         userNotifier.orderCompleted(order);
+        managementReporter.collect(completedOrder);
+
         return Optional.of(drink);
     }
 

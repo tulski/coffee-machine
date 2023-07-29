@@ -30,4 +30,9 @@ class MemorableConsoleNotificationSender implements UserNotifier {
         return completedOrdersHistory;
     }
 
+    public void clearHistory() {
+        missingMoneyHistory.clear();
+        completedOrdersHistory.clear();
+    }
+
 }
