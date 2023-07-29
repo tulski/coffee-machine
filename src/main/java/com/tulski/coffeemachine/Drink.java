@@ -1,4 +1,4 @@
 package com.tulski.coffeemachine;
 
-public record Drink(DrinkType type, int sugar, boolean stick) {
+public record Drink(DrinkType type, int sugar, boolean stick, boolean extraHot) {
 }

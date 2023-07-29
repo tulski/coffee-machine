@@ -16,7 +16,7 @@ class DrinkMakerSpec extends Specification {
 
     def "drink maker should make drink if correct amount of money is given"() {
         given: "order for 1 tea with 1 sugar and stick"
-        def order = new DrinkOrder(DrinkType.TEA, 1, true)
+        def order = new DrinkOrder(DrinkType.TEA, 1, true, true)
 
         when: "drink maker receives 1 euro"
         drinkMaker.putMoney(Money.euros(1))
@@ -29,11 +29,12 @@ class DrinkMakerSpec extends Specification {
         result.get().type() == DrinkType.TEA
         result.get().sugar() == 1
         result.get().stick()
+        result.get().extraHot()
     }
 
     def "drink maker should not make drink if not enough money is given"() {
         given: "order for 1 tea with 1 sugar and stick"
-        def command = new DrinkOrder(DrinkType.TEA, 1, true)
+        def command = new DrinkOrder(DrinkType.TEA)
 
         when: "drink maker receives 0.2 euro"
         drinkMaker.putMoney(Money.cents(20))
@@ -47,7 +48,7 @@ class DrinkMakerSpec extends Specification {
 
     def "drink maker should allow to put extra money if missing"() {
         given: "order for 1 tea with 1 sugar and stick"
-        def order = new DrinkOrder(DrinkType.TEA, 1, true)
+        def order = new DrinkOrder(DrinkType.TEA)
 
         when: "drink maker receives 0.2 euro"
         drinkMaker.putMoney(Money.cents(10))
@@ -67,13 +68,11 @@ class DrinkMakerSpec extends Specification {
         then: "should make drink"
         result.present
         result.get().type() == DrinkType.TEA
-        result.get().sugar() == 1
-        result.get().stick()
     }
 
     def "drink maker should notify customer if not enough money is given"() {
         given: "order for 1 tea with 1 sugar and stick"
-        def order = new DrinkOrder(DrinkType.TEA, 1, true)
+        def order = new DrinkOrder(DrinkType.TEA, 1)
 
         when: "drink maker receives 0.5 euro"
         drinkMaker.putMoney(Money.cents(10))

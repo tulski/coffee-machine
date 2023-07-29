@@ -45,6 +45,58 @@ class DrinkMakerProtocolTranslatorSpec extends Specification {
         result.stick()
     }
 
+    def "should translate order for 1 orange juice"() {
+        given: "O:: command"
+        def command = "O::"
+
+        when: "translating command"
+        var result = translator.translate(command) as DrinkMakerCommand.DrinkOrder
+
+        then: "result should be correct"
+        result.drinkType() == DrinkType.ORANGE_JUICE
+        result.sugarQuantity() == 0
+    }
+
+    def "should translate order for extra hot coffee with no sugar"() {
+        given: "Ch:: command"
+        def command = "Ch::"
+
+        when: "translating command"
+        var result = translator.translate(command) as DrinkMakerCommand.DrinkOrder
+
+        then: "result should be correct"
+        result.drinkType() == DrinkType.COFFEE
+        result.sugarQuantity() == 0
+        result.extraHot()
+    }
+
+    def "should translate order for extra hot chocolate with one sugar and stick"() {
+        given: "Hh:1:1 command"
+        def command = "Hh:1:1"
+
+        when: "translating command"
+        var result = translator.translate(command) as DrinkMakerCommand.DrinkOrder
+
+        then: "result should be correct"
+        result.drinkType() == DrinkType.CHOCOLATE
+        result.sugarQuantity() == 1
+        result.stick()
+        result.extraHot()
+    }
+
+    def "should translate order for extra hot tea with two sugar and stick"() {
+        given: "Th:2:1 command"
+        def command = "Th:2:1"
+
+        when: "translating command"
+        var result = translator.translate(command) as DrinkMakerCommand.DrinkOrder
+
+        then: "result should be correct"
+        result.drinkType() == DrinkType.TEA
+        result.sugarQuantity() == 2
+        result.stick()
+    }
+
     def "should translate command with message"() {
         given: "M:message-content command"
         def command = "M:message-content"

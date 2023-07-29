@@ -33,7 +33,7 @@ class DrinkMaker {
             return Optional.empty();
         }
         balance.subtract(price);
-        var drink = new Drink(order.drinkType(), order.sugarQuantity(), order.stick());
+        var drink = new Drink(order.drinkType(), order.sugarQuantity(), order.stick(), order.extraHot());
         userNotifier.orderCompleted(order);
         return Optional.of(drink);
     }

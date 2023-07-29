@@ -8,7 +8,7 @@ class Pricing {
         return switch (order.drinkType()) {
             case TEA -> Money.cents(40);
             case CHOCOLATE -> Money.cents(50);
-            case COFFEE -> Money.cents(60);
+            case COFFEE, ORANGE_JUICE -> Money.cents(60);
         };
     }
 

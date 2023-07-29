@@ -9,7 +9,10 @@ class DrinkMakerProtocolTranslator {
 
         var parts = order.split(":", -1);
 
-        var commandType = DrinkMakerCommandType.fromCode(parts[0]);
+        var commandCode = parts[0].substring(0, 1);
+        var extraHot = parts[0].substring(1).equals("h");
+
+        var commandType = DrinkMakerCommandType.fromCode(commandCode);
 
         if (commandType == DrinkMakerCommandType.MESSAGE) {
             assertValidExpressionsLength(parts, 2);
@@ -18,27 +21,20 @@ class DrinkMakerProtocolTranslator {
         assertValidExpressionsLength(parts, 3);
 
         var sugarQuantity = parts[1].isBlank() ? 0 : Integer.parseInt(parts[1]);
-        if (sugarQuantity < 0 || sugarQuantity > 2) {
-            throw new IllegalArgumentException("Sugar quantity must be between 0 and 2");
-        }
-        var stick = sugarQuantity > 0;
 
         var drink = mapCommadTypeToDrinkType(commandType);
 
-        return new DrinkMakerCommand.DrinkOrder(drink, sugarQuantity, stick);
+        return new DrinkMakerCommand.DrinkOrder(drink, sugarQuantity, extraHot);
     }
 
     private static DrinkType mapCommadTypeToDrinkType(DrinkMakerCommandType commandType) {
-        switch (commandType) {
-            case TEA:
-                return DrinkType.TEA;
-            case CHOCOLATE:
-                return DrinkType.CHOCOLATE;
-            case COFFEE:
-                return DrinkType.COFFEE;
-            default:
-                throw new IllegalArgumentException("Unknown command type: " + commandType);
-        }
+        return switch (commandType) {
+            case TEA -> DrinkType.TEA;
+            case CHOCOLATE -> DrinkType.CHOCOLATE;
+            case COFFEE -> DrinkType.COFFEE;
+            case ORANGE_JUICE -> DrinkType.ORANGE_JUICE;
+            default -> throw new IllegalArgumentException("Unknown command type: " + commandType);
+        };
     }
 
     private void assertNotEmptyOrBlank(String order) {
